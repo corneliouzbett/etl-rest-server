@@ -6,7 +6,7 @@
     "uses": [],
     "sources": [
         {
-            "table": "etl.flat_appointment",
+            "table": "etl.flat_appointment_test",
             "alias": "t2"
         },
         {
@@ -18,7 +18,7 @@
             }
         },
         {
-            "table": "etl.flat_appointment",
+            "table": "etl.flat_appointment_test",
             "alias": "t3",
             "join": {
                 "type": "LEFT",
@@ -44,6 +44,11 @@
         },
         {
             "type": "simple_column",
+            "alias": "med_pickup_date",
+            "column": "t2.med_pickup_date"
+        },
+        {
+            "type": "simple_column",
             "alias": "scheduled_date",
             "column": "date_format(t2.rtc_date,'%Y-%m-%d')"
         },
@@ -52,7 +57,7 @@
             "alias": "patients",
             "expressionType": "simple_expression",
             "expressionOptions": {
-                "expression": "if(DATE_FORMAT(t2.rtc_date, '%Y-%m-%d') = '{startDate}',1,null)"
+                "expression": "if(((DATE_FORMAT(t2.rtc_date, '%Y-%m-%d') = '{startDate}') OR (DATE_FORMAT(t2.med_pickup_date, '%Y-%m-%d') = '{startDate}')),1,null)"
             }
         }
     ],
@@ -61,13 +66,8 @@
         "conditions": [
             {
                 "filterType": "tableColumns",
-                "conditionExpression": "date(t2.rtc_date) >= ?",
-                "parameterName": "startDate"
-            },
-            {
-                "filterType": "tableColumns",
-                "conditionExpression": "date(t2.rtc_date) <= ?",
-                "parameterName": "endDate"
+                "conditionExpression": "(DATE(t2.rtc_date) >= '{startDate}' AND DATE(t2.rtc_date) <= '{endDate}') OR (DATE(t2.med_pickup_date) >= '{startDate}' AND DATE(t2.med_pickup_date) <= '{endDate}')",
+                "parameterName": ""
             },
             {
                 "filterType": "tableColumns",

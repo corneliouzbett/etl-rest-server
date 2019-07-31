@@ -6,7 +6,7 @@
     "uses": [],
     "sources": [
         {
-            "table": "etl.flat_appointment",
+            "table": "etl.flat_appointment_test",
             "alias": "t2"
         }
     ],
@@ -42,13 +42,8 @@
         "conditions": [
             {
                 "filterType": "tableColumns",
-                "conditionExpression": "t2.rtc_date >= ?",
+                "conditionExpression": "(t2.rtc_date >= '{startDate}' AND t2.rtc_date <= '{endDate}' ) OR (t2.med_pickup_date >= '{startDate}' AND t2.med_pickup_date <= '{endDate}')",
                 "parameterName": "startDate"
-            },
-            {
-              "filterType": "tableColumns",
-              "conditionExpression": "t2.rtc_date <= ?",
-              "parameterName": "endDate"
             },
             {
                 "filterType": "tableColumns",
